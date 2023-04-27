@@ -11,13 +11,20 @@ const todoSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   completed: { type: Boolean, default: false },
+  email: { type: String, required: true }
 });
 
 // Define the Todo model
 const Todo = mongoose.model("Todo", todoSchema);
 
-app.get("/api/v1/todos", (req, res) => {
-  Todo.find()
+// app.get("/api/v1/todos", (req, res) => {
+//   Todo.find()
+//     .then((todos) => res.json(todos))
+//     .catch((err) => res.status(400).json(`Error: ${err}`));
+// });
+
+app.get("/api/v1/allTodos/:email", (req, res) => {
+  Todo.find({ email: req.params.email })
     .then((todos) => res.json(todos))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
@@ -33,6 +40,7 @@ app.post("/api/v1/todos", (req, res) => {
     title: req.body.title,
     description: req.body.description,
     completed: req.body.completed,
+    email: req.body.email
   });
 
   newTodo
@@ -47,6 +55,7 @@ app.put("/api/v1/todos/:id", (req, res) => {
       todo.title = req.body.title;
       todo.description = req.body.description;
       todo.completed = req.body.completed;
+      todo.email = req.body.email;
 
       todo
         .save()

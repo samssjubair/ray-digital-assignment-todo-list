@@ -5,24 +5,28 @@ import Todo from './components/Todo/Todo';
 import Homepage from './components/Home/Homepage';
 
 const App = () => {
-    const [value,setValue]=useState('');
+    const [userName,setUserName]=useState('');
+    const [email,setEmail]=useState('');
     const handleClick=()=>{
         signInWithPopup(auth, provider)
         .then((result)=>{
             console.log(result.user);
-            setValue(result.user.email);
+            setUserName(result.user.email);
+            setEmail(result.user.email);
             localStorage.setItem('user',result.user.displayName);
+            localStorage.setItem('email',result.user.email);
         })
     }
 
     useEffect(()=>{
-        setValue(localStorage.getItem('user'));
+        setUserName(localStorage.getItem('user'));
+        setEmail(localStorage.getItem('email'));
     });
 
     return (
         <>
         {
-            value ? <Todo user={value}/> : <Homepage handleClick={handleClick}/>
+            userName ? <Todo userName={userName} email={email} /> : <Homepage handleClick={handleClick}/>
         }
         </>
     );

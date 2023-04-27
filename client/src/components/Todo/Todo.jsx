@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Todo({ user}) {
+function Todo({ userName, email}) {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:4999/api/v1/todos")
+      .get(`http://localhost:4999/api/v1/allTodos/${email}`)
       .then((res) => setTodos(res.data))
       .catch((err) => console.log(err));
   });
+
+  // const userTodos = todos.filter((todo) => todo.user === email);
 
   const handleComplete = (todo) => {
     const updatedTodo = { ...todo, completed: !todo.completed };
@@ -37,7 +39,7 @@ function Todo({ user}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newTodo = { title, description, completed: false };
+    const newTodo = { user: email,title, description, completed: false, email: email };
 
     axios
       .post("http://localhost:4999/api/v1/todos", newTodo)
@@ -78,7 +80,7 @@ function Todo({ user}) {
       
       <div className="pb-4">
         <h2 className="text-xl font-medium text-center">
-          Hello {user}
+          Hello {userName}
         </h2>
         
       </div>
