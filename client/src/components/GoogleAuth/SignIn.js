@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {auth, provider } from './config';
 import {signInWithPopup} from 'firebase/auth';
-import Todo from './components/Todo/Todo';
-import Homepage from './components/Home/Homepage';
 
-const App = () => {
+const SignIn = () => {
     const [value,setValue]=useState('');
     const handleClick=()=>{
         signInWithPopup(auth, provider)
         .then((result)=>{
             console.log(result.user);
             setValue(result.user.email);
-            localStorage.setItem('user',result.user.displayName);
+            localStorage.setItem('user',result.user.email);
         })
     }
 
@@ -20,12 +18,10 @@ const App = () => {
     });
 
     return (
-        <>
         {
-            value ? <Todo user={value}/> : <Homepage handleClick={handleClick}/>
+            value ? value : <button onClick={handleClick}>Sign In</button>
         }
-        </>
     );
 };
 
-export default App;
+export default SignIn;
