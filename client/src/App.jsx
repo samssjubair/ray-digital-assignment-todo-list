@@ -11,7 +11,24 @@ function App() {
       .get("http://localhost:4999/api/v1/todos")
       .then((res) => setTodos(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  });
+
+  const handleComplete = (todo) => {
+    const updatedTodo = { ...todo, completed: !todo.completed };
+    axios
+      .put(`http://localhost:4999/api/v1/todos/${todo._id}`, updatedTodo)
+      .then(() => {
+        const updatedTodos = todos.map((t) => {
+          if (t._id === todo._id) {
+            return updatedTodo;
+          }
+          return t;
+        });
+        setTodos(updatedTodos);
+      })
+      .catch((err) => console.log(err));
+  };
+  
 
   const handleTitleChange = (e) => setTitle(e.target.value);
 
@@ -20,7 +37,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newTodo = { title, description };
+    const newTodo = { title, description, completed: false };
 
     axios
       .post("http://localhost:4999/api/v1/todos", newTodo)
@@ -46,13 +63,7 @@ function App() {
     <div className="max-w-7xl mx-auto py-6 sm:px-6  lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         <div className="flex justify-between mb-6">
-          <h1 className="text-2xl font-bold">Todo List</h1>
-          <button
-            className="btn btn-primary"
-            onClick={() => window.location.reload()}
-          >
-            Refresh
-          </button>
+          <h1 className="text-3xl mx-auto font-bold">Todo List</h1>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -87,15 +98,24 @@ function App() {
               onChange={handleDescriptionChange}
             ></textarea>
           </div>
-          <button className="btn btn-primary" type="submit">
+          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">
             Add Todo
           </button>
+
         </form>
         <div className="mt-8">
           {todos.map((todo) => (
             <div className="mb-4" key={todo._id}>
               <div className="flex justify-between">
-                <h2 className="text-lg font-bold">{todo.title}</h2>
+                <div className="flex">
+                  <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={todo.completed}
+                  onChange={() => handleComplete(todo)}
+                />
+                  <h2 className="text-lg font-bold">{todo.title}</h2>
+                </div>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(todo._id)}
