@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+.btn {
+  @apply inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150;
+}
+
+.btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:border-blue-900 focus:shadow-outline-blue;
+}
+
+.btn-danger {
+  @apply bg-red-500 hover:bg-red-600 active:bg-red-700 focus:border-red-900 focus:shadow-outline-red;
+}
